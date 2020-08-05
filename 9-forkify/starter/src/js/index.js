@@ -147,7 +147,6 @@ elements.shopping.addEventListener('click', e => {
         //Handle the count update    
     } else if (e.target.matches('.shopping__count-value')) {
         const val = parseFloat(e.target.value, 10);
-
         state.list.updateCount(id, val);
     }
 
@@ -155,9 +154,6 @@ elements.shopping.addEventListener('click', e => {
 /***
  * LIKE CONTROLLER
  */
-//TESTING
-
-//END TESTING
 const controlLike = () => {
     if (!state.likes) {
         state.likes = new Likes();
@@ -187,14 +183,20 @@ const controlLike = () => {
 window.addEventListener('load', () => {
 
     state.likes = new Likes();
+    state.list = new List();
     //Restore likes
     state.likes.readStorage();
+    state.list.readStorage();
     //Toggle like menu button
     likesView.toggleLikeMenu(state.likes.getNumLikes());
     //Render the existing likes
     state.likes.likes.forEach(like => {
         likesView.renderLike(like);
     });
+    //Render the existing items in shopping list
+    state.list.items.forEach(item => {
+        listView.renderItem(item);
+    })
 });
 
 //Handling recipe button clicks
@@ -228,8 +230,8 @@ elements.clearAll.addEventListener('click', e => {
         })
         .then((willDelete) => {
             if (willDelete) {
-                elements.shopping.style.display = 'none';
                 elements.clearAll.style.display = 'none';
+                elements.shopping.innerHTML = '';
                 swal("Poof! ingredients has been deleted!", {
                     icon: "success",
                 });
@@ -239,12 +241,34 @@ elements.clearAll.addEventListener('click', e => {
         });
 
 });
-elements.addItem.addEventListener('click',()=> {
+elements.addItem.addEventListener('click', () => {
     elements.itemForm.style.display = "block";
 });
-elements.save.addEventListener('click',() => {
-    listView.saveItem();
-});
 
-//TESTING
-//window.l = new List();
+elements.save.addEventListener('click', () => {
+    let item;
+    const arr = listView.saveItem();
+    if (arr[0]) {
+        elements.count.value = "";
+        elements.unit.value = "";
+        elements.ingredient.value = "";
+        item = state.list.addItem(arr[1], arr[2], arr[3]);
+        elements.clearAll.style.display = "block";
+        const markup = `
+   <li class="shopping__item" data-itemid = ${item.id}>
+                    <div class="shopping__count">
+                        <input type="number" value="${item.count}" step="${item.count}" class="shopping__count-value">
+                        <p>${item.unit}</p>
+                    </div>
+                    <p class="shopping__description">${item.ingredient}</p>
+                    <button class="shopping__delete btn-tiny">
+                        <svg>
+                            <use href="img/icons.svg#icon-circle-with-cross"></use>
+                        </svg>
+                    </button>
+                </li>
+   `;
+        elements.shopping.insertAdjacentHTML('beforeend', markup); //beforeend means one is added after the other
+        elements.itemForm.style.display = 'none';
+    }
+});
