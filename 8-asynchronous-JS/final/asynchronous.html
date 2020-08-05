@@ -95,6 +95,9 @@
         // }
         // getRecipesAW().then(result => console.log(`${result} is the best ever!`));
 
+
+
+
         function getWeather(woeid) {
             fetch(`https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`)
             .then(result => {
@@ -124,7 +127,7 @@
             }
         }
         getWeatherAW(2487956);
-        
+
         let dataLondon;
         getWeatherAW(44418).then(data => {
             dataLondon = data

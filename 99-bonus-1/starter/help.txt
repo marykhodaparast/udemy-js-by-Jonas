@@ -1,0 +1,11 @@
+12-2
+type node in the terminal and do javascript for exit say control c and again control c
+node index.js
+sudo npm install nodemon -g
+nodemon
+write 127.0.0.1:1337 and it says someone did access the server
+
+12-3
+I learn nodejs works with images and style.css as route so if we want to have our images to be displayed on our site
+we must write a route for this so we wrote a code for our images route but for style.css we used inline and didn't use
+any code for css routes in index.js

@@ -33,7 +33,6 @@ console.log(mark.lastName);
 */
 
 
-
 /////////////////////////////
 // Lecture: Object.create
 /*
@@ -54,7 +53,6 @@ var jane = Object.create(personProto, {
     job: { value: 'designer' }
 });
 */
-
 
 
 /////////////////////////////
@@ -98,7 +96,6 @@ console.log(obj.city);
 */
 
 
-
 /////////////////////////////
 // Lecture: Passing functions as arguments
 /*
@@ -138,7 +135,6 @@ console.log(rates);
 */
 
 
-
 /////////////////////////////
 // Lecture: Functions returning functions
 /*
@@ -172,7 +168,6 @@ interviewQuestion('teacher')('Mark');
 */
 
 
-
 /////////////////////////////
 // Lecture: IIFE
 /*
@@ -196,7 +191,6 @@ game();
     console.log(score >= 5 - goodLuck);
 })(5);
 */
-
 
 
 /////////////////////////////
@@ -235,7 +229,6 @@ function interviewQuestion(job) {
 
 interviewQuestion('teacher')('John');
 */
-
 
 
 /////////////////////////////
@@ -301,8 +294,6 @@ console.log(fullJapan);
 */
 
 
-
-
 /////////////////////////////
 // CODING CHALLENGE
 
@@ -327,6 +318,73 @@ c) correct answer (I would use a number for this)
 
 7. Suppose this code would be a plugin for other programmers to use in their code. So make sure that all your code is private and doesn't interfere with the other programmers code (Hint: we learned a special technique to do exactly that).
 */
+console.log('%c Oh my heavens! ', 'background: #222; color: pink');
+
+function Question(question, answers, correctAnswer) {
+    this.question = question;
+    this.answers = answers;
+    this.correctAnswer = correctAnswer;
+}
+
+var q1 = new Question('what is Leonardo davinchi job?', {
+    0: 'painter',
+    1: 'teacher',
+    2: 'writer'
+}, 0);
+var q2 = new Question('what is the best job?', {
+    0: 'architect',
+    1: 'programmer',
+    2: 'teacher'
+}, 1);
+var q3 = new Question('why do you live?!',
+    {
+        0: 'fun',
+        1: 'pray',
+        2: 'fun and pray'
+    }, 2);
+var questions = [q1, q2, q3];
+Question.prototype.display = function () {
+    console.log(this.question);
+    for (var key in this.answers) {
+        console.log(key + ':' + this.answers[key]);
+    }
+}
+var n = Math.floor(Math.random() * questions.length);
+var score = 0;
+valueToUse = questions[n];
+valueToUse.display();
+var answer = prompt("Please write the correct answer?");
+checkAnswer(answer, valueToUse);
+
+function nextRandomQuestion() {
+    var x = questions[Math.floor(Math.random() * questions.length)];
+    x.display();
+    var ans = prompt("Please write the correct answer?");
+    if (ans !== 'exit') {
+        checkAnswer(ans, x);
+    }
+}
+
+function checkAnswer(answer, value) {
+    if (value) {
+        if (answer == value.correctAnswer) {
+            console.log('correct answer');
+            score++;
+            console.log('Your score is:' + score);
+            console.log('----------------------------------------');
+            nextRandomQuestion();
+
+        } else {
+            console.log('wrong answer! please try again!');
+            console.log('Your score is:' + score);
+            console.log('----------------------------------------');
+            nextRandomQuestion();
+
+        }
+    }
+}
+
+checkAnswer();
 
 
 /*
@@ -377,7 +435,6 @@ c) correct answer (I would use a number for this)
     questions[n].checkAnswer(answer);
 })();
 */
-
 
 
 /*

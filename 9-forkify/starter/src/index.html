@@ -197,6 +197,7 @@
 
         <div class="recipe">
 
+
             <!--
             <figure class="recipe__fig">
                 <img src="img/test-1.jpg" alt="Tomato" class="recipe__img">
@@ -426,8 +427,24 @@
                     </button>
                 </li>
                 -->
+                <!--<div>
+                <input type="number" placeholder="count"/>
+                <input type="text" placeholder="unit"/>
+                <input type="text" placeholder="ingredient"/>
+                <button type="button" value="save"></button>
+                </div>-->
             </ul>
 
+            <div class="buttons" style="display:none">
+                <button type="button" class="clearAll inline">clear all</button>
+                <button type="button" class="addItem inline">add item manually</button>
+            </div>
+            <div class="mt-5 itemForm" style="display:none">
+                <input type="number" placeholder="count" class="shopping__count count" />
+                <input type="text" placeholder="unit" class="shopping__count unit" />
+                <input type="text" placeholder="ingredient" class="shopping__count ingredient" />
+                <button type="button" class="inline save">Save</button>
+            </div>
             <div class="copyright">
                 &copy; by Jonas Schmedtmann. Powered by
                 <a href="http://food2fork.com" target="_blank" class="link">Food2Fork.com</a>.

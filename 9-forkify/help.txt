@@ -1,0 +1,31 @@
+9-5:
+
+npm init
+npm install web pack --save-dev
+npm install jquery --save
+npm install live-server --global
+Do live-server anywhere for example desktop
+--global === -g
+
+9-7:
+npm install webpack-cli --save-dev
+npm run dev
+npm run build compresses bundle.js compared with npm run dev
+
+9-8:
+npm install webpack-dev-server --save-dev
+//npm start updates the browser as soon as we change our code --open = opens the page in the browser automatically
+npm install html-webpack-plugin --save-dev
+
+9-9
+npm install babel-core babel-preset-env babel-loader --save-dev
+//polyfill changes sth like promises that are not in ES5 to be written in ES5
+npm install babel-polyfill --save
+
+9-13
+npm install axios --save
+
+9-24
+npm install fractional --save
+9-26:
+npm install uniquid --save
