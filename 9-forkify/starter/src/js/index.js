@@ -135,6 +135,11 @@ const controlList = () => {
     });
     elements.buttons.style.display = 'block';
 };
+const makeClearAllDisabled = () => {
+    if(!state.list.items.length){
+        elements.clearAll.disabled = true;
+    }
+}
 //Handle delete and update list item events
 elements.shopping.addEventListener('click', e => {
     const id = e.target.closest('.shopping__item').dataset.itemid;
@@ -142,6 +147,7 @@ elements.shopping.addEventListener('click', e => {
     if (e.target.matches('.shopping__delete, .shopping__delete *')) {
         //Delete from state 
         state.list.deleteItem(id);
+        makeClearAllDisabled();
         //Delete from UI
         listView.deleteItem(id);
         //Handle the count update    
@@ -196,7 +202,8 @@ window.addEventListener('load', () => {
     //Render the existing items in shopping list
     state.list.items.forEach(item => {
         listView.renderItem(item);
-    })
+    });
+    makeClearAllDisabled();
 });
 
 //Handling recipe button clicks
@@ -213,6 +220,7 @@ elements.recipe.addEventListener('click', e => {
         recipeView.updateServingIngredients(state.recipe);
     } else if (e.target.matches('.recipe__btn--add,.recipe__btn--add *')) {
         //Add ingredients to shopping list
+        elements.clearAll.disabled = false;
         controlList();
     } else if (e.target.matches('.recipe__love,.recipe__love *')) {
         //LIKE controller
@@ -230,13 +238,11 @@ elements.clearAll.addEventListener('click', e => {
         })
         .then((willDelete) => {
             if (willDelete) {
-                elements.clearAll.style.display = 'none';
+                elements.clearAll.disabled = true;
                 elements.shopping.innerHTML = '';
                 swal("Poof! ingredients has been deleted!", {
                     icon: "success",
                 });
-            } else {
-                swal("The ingredients are safe!");
             }
         });
 
@@ -253,7 +259,6 @@ elements.save.addEventListener('click', () => {
         elements.unit.value = "";
         elements.ingredient.value = "";
         item = state.list.addItem(arr[1], arr[2], arr[3]);
-        elements.clearAll.style.display = "block";
         const markup = `
    <li class="shopping__item" data-itemid = ${item.id}>
                     <div class="shopping__count">
@@ -270,5 +275,6 @@ elements.save.addEventListener('click', () => {
    `;
         elements.shopping.insertAdjacentHTML('beforeend', markup); //beforeend means one is added after the other
         elements.itemForm.style.display = 'none';
+        elements.clearAll.disabled = false;
     }
 });
