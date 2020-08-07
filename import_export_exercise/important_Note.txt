@@ -1,0 +1,326 @@
+TERMINAL COMMANDS THAT I DIDN'T KNOW
+
+mkdir test      --> make new folder test
+touch test.js   --> create new file test.js
+cp test.js ..   --> copy test.js to parent folder
+mv test.js ..   --> move test.js to parent folder
+rm test.js      --> remove test.js permenantly 
+rm -r test      --> remove all files in the folder test and then deletes test folder
+open index.html --> opens file in the default browser 
+
+-----------------------------------------------------
+WORKS NEEDED TO USE WEBPACK,BABEL & NPM IN YOUR PROJECT
+
+1) install node
+2) node -v in the terminal 
+3) npm -v in the terminal
+4) move to our project using cd for example cd 9-forkify
+5) npm init (package_name:forkify, version in ok, description:forkify project, author:your name)
+with steps 1 to 5 package.json is created
+6) npm install webpack --save-dev --> "devDependencies": {
+                                               "webpack": "^4.44.1"
+                                      } is written in the package.json file
+important: if npm install package doesnt work try sudo npm install package
+7) (optional) npm install jquery --save --> "dependencies": {
+                                                "jquery": "^3.5.1"
+                                            }
+important: if we doesnt have node_modules and just package.json try npm install to install all the packages you need                                            
+8) npm uninstall jquery --save  
+9) sudo npm install live-server --global(-g) -->  live server allows us to create a very simple and local webserver  to serve some static websites
+beacause we don't want to just use webpack inside our project 
+10) if you write live-server in terminal from any folder it works 
+11) add a file in your folder called webpack.config.js --> we can setup our configurations or setting
+12) Now we create src and dist folder in our project and for example src/js/index.js and also in the dist folder we create js folder
+in webpack 4 we have development and production mode that in development mode builds our bundle without minifying our bundle code but 
+production mode do all kinds of optimization like minifying, tree shaking, etc...
+
+now that is our webpack.config.js 
+*****************************
+const path = require('path');
+
+module.exports = {
+    entry:'./src/js/index.js',
+    output: {
+        path:path.resolve(__dirname,'dist/js'),
+        filename:'bundle.js'
+    },
+    mode:'development',
+    
+};
+******************************
+we should test it we create test.js in src/js
+we write 
+******************************
+console.log('Imported module');
+export default 23;
+*******************************
+in test.js file 
+the we write 
+*******************************
+import x from './test';
+console.log(`I imported ${x} from another module`);
+*******************************
+in the src/js/index.js file 
+the we sould go to package.json file and we change the srcipts 
+*******************************
+"scripts": {
+    "dev":"webpack"
+},
+*******************************
+in terminal write npm install webpack-cli --save-dev
+then in terminal write npm run dev --> now a bundle.js file is created in the dist folder 
+in the dist folder create a html file called index.html 
+in the html file we created we write 
+********************************
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="js/bundle.js"></script>
+</body>
+</html>
+*********************************
+in the terminal write open dist/index.html 
+in the webpack.config.js we remove mode:development and in the package.json we write 
+**********************************
+"scripts": {
+    "dev":"webpack --mode development",
+    "build":"webpack --mode production"
+},
+**********************************
+now in the terminal write npm run build --> now bundle.js file is much smaller
+now we add webpack dev server to automatically reload the page when we save our code 
+so in the terminal write 
+npm install webpack-dev-server --save-dev
+now we go to webpack.config.js file and write 
+***********************************
+const path = require('path');
+
+module.exports = {
+    entry:'./src/js/index.js',
+    output: {
+        path:path.resolve(__dirname,'dist/js'),
+        filename:'bundle.js'
+    },
+    devServer: {
+        contentBase:'./dist'
+    }
+
+};
+***********************************
+now we go to package.json file and change the scripts part as below
+***********************************
+"scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "start":"webpack-dev-server --mode development --open"
+  },
+***********************************
+now open terminal and write npm run start
+change 23 to 99 in the test.js and it doesn't work(23 is not changed to 99) so what we do is 
+stop terminal by writing control + c and again in the terminal write npm run start and also it doesn't work 
+we open webpack.config.js file and write below 
+************************************
+const path = require('path');
+
+module.exports = {
+    entry:'./src/js/index.js',
+    output: {
+        path:path.resolve(__dirname,'dist'),
+        filename:'js/bundle.js'
+    },
+    devServer: {
+        contentBase:'./dist'
+    }
+
+};
+************************************
+again write npm run start and now it works :)
+and even you delete the bundle.js file again it works :)
+now we want to copy our main html file that is in the src/js to dist/js --> webpack allows us to do it very easily
+so we go to terminal and write 
+npm install html-webpack-plugin --save-dev
+and then go to webpack.config.js and write 
+************************************
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    entry:'./src/js/index.js',
+    output: {
+        path:path.resolve(__dirname,'dist'),
+        filename:'js/bundle.js'
+    },
+    devServer: {
+        contentBase:'./dist'
+    },
+    plugins:[
+        new HtmlWebpackPlugin({
+            filename:'index.html',
+            template:'./src/index.html'
+        })
+    ]
+
+};
+************************************
+so delete dist/index.html file just delete index.html file not dist folder 
+and in the terminal write npm run start again
+now if we write npm run dev or npm run build we see bundle.js file on our disk 
+now in the next lecture we learn how to include babel to convert ES6 code to ES5
+babeljs.io 
+now in the terminal write 
+npm install babel-core babel-preset-env babel-loader --save-dev
+now in the webpack.config.js we write 
+*************************************
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    entry:'./src/js/index.js',
+    output: {
+        path:path.resolve(__dirname,'dist'),
+        filename:'js/bundle.js'
+    },
+    devServer: {
+        contentBase:'./dist'
+    },
+    plugins:[
+        new HtmlWebpackPlugin({
+            filename:'index.html',
+            template:'./src/index.html'
+        })
+    ],
+    module:{
+        rules:[
+            {
+                test:/\.js$/,
+                exclude:/node-modules/,
+                use:{
+                    lodaer:'babel-loader'
+                }
+            }
+        ]
+    }
+
+};
+*************************************
+now we need a config file for babel in your folder for example starter/.babelrc
+in the .babelrc we write 
+*************************************
+{
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 5 versions",
+              "ie >= 8"
+            ]
+          }
+        }
+      ]
+    ]
+  }
+*************************************
+in the terminal write 
+npm install babel-polyfill --save
+now we change the webpack.config.js as below 
+**************************************
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+    entry:['babel-polyfill','./src/js/index.js'],
+    output: {
+        path:path.resolve(__dirname,'dist'),
+        filename:'js/bundle.js'
+    },
+    devServer: {
+        contentBase:'./dist'
+    },
+    plugins:[
+        new HtmlWebpackPlugin({
+            filename:'index.html',
+            template:'./src/index.html'
+        })
+    ],
+    module:{
+        rules:[
+            {
+                test:/\.js$/,
+                exclude:/node-modules/,
+                use:{
+                    loader:'babel-loader'
+                }
+            }
+        ]
+    }
+
+};
+**************************************
+now in the src/js/index.js file we write 
+**************************************
+import x from './test';
+const y = 56;
+console.log(`I imported ${x} from another module. Variable y is ${y}`);
+**************************************
+and in the terminal write npm run dev and you see error 
+so in the package.json file write 
+**************************************
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "test to learn",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server --mode development --open"
+  },
+  "author": "maryam khodaparast",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.6.1",
+    "html-webpack-plugin": "^4.3.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0"
+  }
+}
+
+**************************************
+then npm install and then npm run dev and now it works :)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
